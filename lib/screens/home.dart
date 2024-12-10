@@ -90,6 +90,15 @@ class _HomeState extends State<Home> {
         team.reference.transactions.get().then((snapshot) {
           for (TransactionsQueryDocumentSnapshot myTransaction
               in snapshot.docs) {
+            myTransaction.reference.concerns.get().then((snapshot) {
+              for (ConcernUsersQueryDocumentSnapshot user in snapshot.docs) {
+                setState(() {
+                  _description.insert(
+                      0, "Suppression de l'utilisateur concerné${user.id}");
+                });
+                user.reference.delete();
+              }
+            });
             setState(() {
               _description.insert(
                   0, "Suppression de la transaction${myTransaction.id}");
